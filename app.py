@@ -1,53 +1,42 @@
-from flask import Flask, request, render_template
 import os
-from utils.omr_reader import process_omr
-from utils.answer_key_parser import parse_answer_key
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
-def home():
+def index():
     return render_template('index.html')
 
 @app.route('/evaluate', methods=['POST'])
 def evaluate():
-    omr_file = request.files['omr_sheet']
-    key_file = request.files['answer_key']
+    try:
+        # Make sure uploads folder exists
+        upload_folder = 'uploads'
+        os.makedirs(upload_folder, exist_ok=True)
 
-    omr_path = os.path.join(UPLOAD_FOLDER, omr_file.filename)
-    key_path = os.path.join(UPLOAD_FOLDER, key_file.filename)
+        # Get uploaded files
+        omr_file = request.files['omr_pdf']
+        answer_file = request.files['answer_key_pdf']
 
-    omr_file.save(omr_path)
-    key_file.save(key_path)
+        # Save files
+        omr_path = os.path.join(upload_folder, omr_file.filename)
+        answer_path = os.path.join(upload_folder, answer_file.filename)
+        omr_file.save(omr_path)
+        answer_file.save(answer_path)
 
-    student_answers = process_omr(omr_path)
-    correct_answers = parse_answer_key(key_path)
+        # TEMP: Hardcoded result values for testing
+        correct = 4
+        wrong = 2
+        unattempted = 34
+        score = correct * 4 - wrong
 
-    correct = wrong = unattempted = 0
+        return render_template('result.html',
+                               correct=correct,
+                               wrong=wrong,
+                               unattempted=unattempted,
+                               score=score)
+    except Exception as e:
+        return f"❌ Error during evaluation: {str(e)}"
 
-    for q in range(1, 181):
-        user_ans = student_answers.get(q)
-        correct_ans = correct_answers.get(q)
-
-        if not user_ans:
-            unattempted += 1
-        elif user_ans == correct_ans:
-            correct += 1
-        else:
-            wrong += 1
-
-    total_score = (correct * 4) - (wrong * 1)
-
-    return f"""
-    <h2>Results:</h2>
-    <p>Correct: {correct}</p>
-    <p>Wrong: {wrong}</p>
-    <p>Unattempted: {unattempted}</p>
-    <p>Total Score: {total_score}</p>
-    """
-
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+if name == '__main__':
+    app.run(debug=True)
