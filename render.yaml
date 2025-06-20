@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: neet-omr-scanner
+    env: python
+    buildCommand: ""
+    startCommand: python app.py
