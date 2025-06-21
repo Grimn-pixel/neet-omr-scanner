@@ -17,7 +17,7 @@ def evaluate():
         # Get uploaded files
         omr_file = request.files['omr_pdf']
         answer_file = request.files['answer_key_pdf']
-
+        return "Evaluation successful!"
         # Save files
         omr_path = os.path.join(uploads_folder, omr_file.filename)
         answer_path = os.path.join(uploads_folder, answer_file.filename)
