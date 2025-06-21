@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, render_template
 
-app = Flask(--name--)
+app = Flask(__name__)
 
 @app.route('/')
 def index():
@@ -38,7 +38,6 @@ def evaluate():
     except Exception as e:
         return f"❌ Error during evaluation: {str(e)}"
 
-if--name-- == '--main--':
+if __name__ == '__main__':
     app.run(debug=True)
-
 
