@@ -12,15 +12,15 @@ def evaluate():
     try:
         # Make sure uploads folder exists
         upload_folder = 'uploads'
-        os.makedirs(upload_folder, exist_ok=True)
+        os.makedirs(uploads_folder, exist_ok=True)
 
         # Get uploaded files
         omr_file = request.files['omr_pdf']
         answer_file = request.files['answer_key_pdf']
 
         # Save files
-        omr_path = os.path.join(upload_folder, omr_file.filename)
-        answer_path = os.path.join(upload_folder, answer_file.filename)
+        omr_path = os.path.join(uploads_folder, omr_file.filename)
+        answer_path = os.path.join(uploads_folder, answer_file.filename)
         omr_file.save(omr_path)
         answer_file.save(answer_path)
 
