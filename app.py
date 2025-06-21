@@ -38,7 +38,7 @@ def evaluate():
     except Exception as e:
         return f"❌ Error during evaluation: {str(e)}"
 
-if name == '__main__':
+if--name-- == '--main--':
     app.run(debug=True)
 
 
