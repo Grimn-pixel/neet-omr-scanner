@@ -3,7 +3,7 @@ run = "git push"
 
 [nix]
 channel = "stable-24_05"
-packages = ["libGL", "libGLU"]
+packages = ["libGL", "libGLU", "libxcrypt", "pkg-config", "xsimd"]
 
 [deployment]
 run = ["sh", "-c", "git push"]
