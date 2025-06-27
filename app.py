@@ -31,7 +31,7 @@ def evaluate():
             print(error_msg)
             return render_template('error.html', error=error_msg)
         
-        # Validate file extensions
+        # Validate file extensions and size
         allowed_extensions = {'.pdf', '.jpg', '.jpeg', '.png'}
         omr_ext = os.path.splitext(omr_file.filename)[1].lower()
         answer_ext = os.path.splitext(answer_file.filename)[1].lower()
@@ -40,6 +40,22 @@ def evaluate():
             error_msg = f"❌ Error: Unsupported file format. Please use PDF, JPG, JPEG, or PNG files"
             print(error_msg)
             return render_template('error.html', error=error_msg)
+        
+        # Check file sizes (10MB limit)
+        max_size = 10 * 1024 * 1024  # 10MB in bytes
+        if len(omr_file.read()) > max_size:
+            error_msg = "❌ Error: OMR file too large. Please use files under 10MB"
+            print(error_msg)
+            return render_template('error.html', error=error_msg)
+        
+        omr_file.seek(0)  # Reset file pointer after reading
+        
+        if len(answer_file.read()) > max_size:
+            error_msg = "❌ Error: Answer key file too large. Please use files under 10MB"
+            print(error_msg)
+            return render_template('error.html', error=error_msg)
+        
+        answer_file.seek(0)  # Reset file pointer after reading
         
         # Save files with safe names
         import time

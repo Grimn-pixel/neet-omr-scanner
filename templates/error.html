@@ -1,3 +1,6 @@
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,84 +11,119 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             min-height: 100vh;
-            padding: 20px;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
-
+        
         .error-container {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            text-align: center;
             max-width: 600px;
             width: 100%;
-            text-align: center;
         }
-
+        
         .error-icon {
             font-size: 4em;
             margin-bottom: 20px;
         }
-
+        
         .error-title {
-            color: #e74c3c;
-            font-size: 2em;
-            margin-bottom: 15px;
-        }
-
-        .error-message {
             color: #2c3e50;
-            font-size: 1.1em;
-            margin-bottom: 30px;
-            line-height: 1.6;
+            font-size: 2em;
+            margin-bottom: 20px;
+            font-weight: 300;
         }
-
-        .suggestions {
-            background: #f8f9fa;
+        
+        .error-message {
+            background: #ffe6e6;
+            color: #d63031;
             padding: 20px;
             border-radius: 10px;
+            border: 1px solid #fab1a0;
             margin: 20px 0;
-            text-align: left;
+            font-size: 1.1em;
+            line-height: 1.5;
         }
-
+        
+        .suggestions {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            text-align: left;
+            border-left: 4px solid #3498db;
+        }
+        
         .suggestions h3 {
             color: #2c3e50;
             margin-bottom: 15px;
+            text-align: center;
         }
-
+        
         .suggestions ul {
-            color: #7f8c8d;
-            padding-left: 20px;
+            list-style-type: none;
+            padding: 0;
         }
-
+        
         .suggestions li {
-            margin-bottom: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+            position: relative;
+            padding-left: 25px;
         }
-
+        
+        .suggestions li:before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+            top: 8px;
+        }
+        
+        .suggestions li:last-child {
+            border-bottom: none;
+        }
+        
         .btn {
-            padding: 12px 25px;
+            display: inline-block;
+            padding: 15px 30px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            border: none;
-            border-radius: 25px;
-            font-size: 1em;
-            cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
+            border-radius: 25px;
+            font-size: 1.1em;
             font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 20px;
         }
-
+        
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 600px) {
+            .error-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .error-title {
+                font-size: 1.5em;
+            }
+            
+            .error-icon {
+                font-size: 3em;
+            }
         }
     </style>
 </head>
@@ -105,6 +143,8 @@
                 <li>Ensure images are clear with good lighting</li>
                 <li>Check that files are not corrupted</li>
                 <li>Try with smaller file sizes (under 10MB)</li>
+                <li>Make sure the OMR sheet has clearly marked bubbles</li>
+                <li>Verify the answer key is properly formatted</li>
             </ul>
         </div>
 
