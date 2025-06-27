@@ -1,18 +1,243 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>NEET OMR Scanner</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEET OMR Scanner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed #bdc3c7;
+            border-radius: 10px;
+            background: #f8f9fa;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .file-input:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+        
+        .file-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .file-info {
+            margin-top: 8px;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .info-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .info-card li {
+            padding: 5px 0;
+            color: #5a6c7d;
+        }
+        
+        .info-card li:before {
+            content: "✓ ";
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-  <h2>NEET OMR Scanner</h2>
-  <form action="/evaluate" method="POST" enctype="multipart/form-data">
-    <label>Upload OMR Sheet (PDF/Image):</label><br>
-    <input type="file" name="omr_sheet" accept=".pdf,.jpg,.jpeg.png" required><br><br>
-
-    <label>Upload Answer Key (PDF/Image):</label><br>
-    <input type="file" name="answer_key" accept=".pdf,.jpg,.jpeg.png" required><br><br>
-
-    <button type="submit">Evaluate</button>
-  </form>
+    <div class="container">
+        <div class="header">
+            <h1>📝 NEET OMR Scanner</h1>
+            <p class="subtitle">Upload your OMR sheet and answer key for instant evaluation</p>
+        </div>
+        
+        <div class="info-card">
+            <h3>📋 Instructions</h3>
+            <ul>
+                <li>Upload a clear image or PDF of your OMR sheet</li>
+                <li>Upload the corresponding answer key</li>
+                <li>Supported formats: PDF, JPG, JPEG, PNG</li>
+                <li>Ensure good lighting and minimal shadows</li>
+            </ul>
+        </div>
+        
+        <form action="/evaluate" method="POST" enctype="multipart/form-data" id="uploadForm">
+            <div class="form-group">
+                <label for="omr_sheet">📄 OMR Sheet (PDF/Image):</label>
+                <input type="file" 
+                       name="omr_sheet" 
+                       id="omr_sheet"
+                       class="file-input"
+                       accept=".pdf,.jpg,.jpeg,.png" 
+                       required>
+                <div class="file-info">Select your completed OMR answer sheet</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="answer_key">🔑 Answer Key (PDF/Image):</label>
+                <input type="file" 
+                       name="answer_key" 
+                       id="answer_key"
+                       class="file-input"
+                       accept=".pdf,.jpg,.jpeg,.png" 
+                       required>
+                <div class="file-info">Select the correct answer key for comparison</div>
+            </div>
+            
+            <button type="submit" class="submit-btn" id="submitBtn">
+                🚀 Evaluate OMR Sheet
+            </button>
+            
+            <div class="loading" id="loading">
+                <p>⏳ Processing your OMR sheet... Please wait</p>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function() {
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('loading').classList.add('show');
+        });
+        
+        // File input feedback
+        document.querySelectorAll('.file-input').forEach(input => {
+            input.addEventListener('change', function() {
+                const fileInfo = this.parentNode.nextElementSibling;
+                if (this.files.length > 0) {
+                    fileInfo.textContent = `Selected: ${this.files[0].name}`;
+                    fileInfo.style.color = '#27ae60';
+                } else {
+                    fileInfo.textContent = fileInfo.getAttribute('data-original') || 'No file selected';
+                    fileInfo.style.color = '#7f8c8d';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
