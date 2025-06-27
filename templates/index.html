@@ -87,6 +87,15 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         
+        .form-group {
+            position: relative;
+            min-height: 100px;
+        }
+        
+        .file-input-wrapper {
+            width: 100%;
+        }
+        
         .file-info {
             margin-top: 8px;
             font-size: 0.9em;
@@ -220,7 +229,17 @@
     </div>
     
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', function() {
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            // Check if both files are selected
+            const omrFile = document.getElementById('omr_sheet').files[0];
+            const answerFile = document.getElementById('answer_key').files[0];
+            
+            if (!omrFile || !answerFile) {
+                e.preventDefault();
+                alert('Please select both OMR sheet and answer key files before submitting.');
+                return false;
+            }
+            
             document.getElementById('submitBtn').style.display = 'none';
             document.getElementById('loading').classList.add('show');
         });
@@ -228,16 +247,43 @@
         // File input feedback
         document.querySelectorAll('.file-input').forEach(input => {
             input.addEventListener('change', function() {
-                const fileInfo = this.parentNode.nextElementSibling;
+                const fileInfo = this.parentNode.querySelector('.file-info');
                 if (this.files.length > 0) {
-                    fileInfo.textContent = `Selected: ${this.files[0].name}`;
+                    fileInfo.textContent = `✅ Selected: ${this.files[0].name}`;
                     fileInfo.style.color = '#27ae60';
+                    fileInfo.style.fontWeight = 'bold';
                 } else {
-                    fileInfo.textContent = fileInfo.getAttribute('data-original') || 'No file selected';
+                    // Reset to original text based on input type
+                    if (this.id === 'omr_sheet') {
+                        fileInfo.textContent = 'Select your completed OMR answer sheet';
+                    } else {
+                        fileInfo.textContent = 'Select the correct answer key for comparison';
+                    }
                     fileInfo.style.color = '#7f8c8d';
+                    fileInfo.style.fontWeight = 'normal';
                 }
+                
+                // Update submit button state
+                updateSubmitButton();
             });
         });
+        
+        function updateSubmitButton() {
+            const omrFile = document.getElementById('omr_sheet').files[0];
+            const answerFile = document.getElementById('answer_key').files[0];
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (omrFile && answerFile) {
+                submitBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                submitBtn.textContent = '🚀 Evaluate OMR Sheet';
+            } else {
+                submitBtn.style.background = '#bdc3c7';
+                submitBtn.textContent = '📋 Select Both Files First';
+            }
+        }
+        
+        // Initialize button state
+        updateSubmitButton();
     </script>
 </body>
 </html>
