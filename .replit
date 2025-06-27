@@ -3,3 +3,6 @@ modules = ["python-3.12", "web"]
 [nix]
 channel = "stable-24_05"
 packages = ["libGL", "libGLU"]
+
+[deployment]
+run = ["sh", "-c", "python app.py"]
