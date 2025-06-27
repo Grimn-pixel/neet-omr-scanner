@@ -7,3 +7,15 @@ packages = ["libGL", "libGLU"]
 
 [deployment]
 run = ["sh", "-c", "git push"]
+
+[workflows]
+runButton = "Run Flask App"
+
+[[workflows.workflow]]
+name = "Run Flask App"
+author = 44312734
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python app.py"
